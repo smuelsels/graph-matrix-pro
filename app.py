@@ -105,14 +105,14 @@ if menu == "Team Member Profiles":
         st.markdown("""
         <div class="profile-card">
             <h3>Samuel</h3>
-            <p style="font-weight: bold; font-size: 13px;">NIM: 021202500026</p>
+            <p style="font-weight: bold; font-size: 13px;">NIM: 02120200017</p>
             <div class="role-badge">⚙️ DevOps & Project Manager / Team Leader</div>
             <div class="contrib-list">
                 <b>Contributions:</b>
                 <ul>
-                    <li>Led the team by coordinating tasks and managing timelines.</li>
-                    <li>Oversaw the entire development workflow.</li>
-                    <li>Handled deployment using GitHub and Streamlit Community Cloud.</li>
+                    <li>.</li>
+                    <li>.</li>
+                    <li>.</li>
                 </ul>
             </div>
         </div>
@@ -124,13 +124,13 @@ if menu == "Team Member Profiles":
         st.markdown("""
         <div class="profile-card">
             <h3>Meysya</h3>
-            <p style="font-weight: bold; font-size: 13px;">NIM: 021202500026</p>
+            <p style="font-weight: bold; font-size: 13px;">NIM: 021202600026</p>
             <div class="role-badge">🪄 Quality Assurance (QA) & Finalizer</div>
             <div class="contrib-list">
                 <b>Contributions:</b>
                 <ul>
-                    <li>Conducted thorough testing of all features to detect bugs, UI inconsistencies, and functionality issues.</li>
-                    <li>Reported issues to the developers and verified fixes to ensure the system operated smoothly.</li>
+                    <li>.</li>
+                    <li>.</li>
                 </ul>
             </div>
         </div>
@@ -142,13 +142,13 @@ if menu == "Team Member Profiles":
         st.markdown("""
         <div class="profile-card">
             <h3>abdi</h3>
-            <p style="font-weight: bold; font-size: 13px;">NIM: 021202500026</p>
+            <p style="font-weight: bold; font-size: 13px;">NIM: 021202600026</p>
             <div class="role-badge">💻 Back-End Developer & Full-Stack Developer</div>
             <div class="contrib-list">
                 <b>Contributions:</b>
                 <ul>
-                    <li>Developed the server-side logic and built the core functionalities required for the web application.</li>
-                    <li>Designed and managed the data flow between the front-end and back-end components.</li>
+                    <li>.</li>
+                    <li>.</li>
                 </ul>
             </div>
         </div>
