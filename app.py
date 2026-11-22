@@ -596,10 +596,7 @@ elif page == "Java Route Finder":
 
     with col_map:
         st.subheader("🗺️ INTERACTIVE JAVA MAP")
-        m = folium.Map(location=[-7.35, 110.2], zoom_start=7, tiles="CartoDB positron")
-
-        lat1, lon1 = CITIES[origin]
-        lat2, lon2 = CITIES[destination]
+        m = folium.Map(location=[-6.6, 107.2], zoom_start=8, tiles="OpenStreetMap")
 
         for cname, (clat, clon) in CITIES.items():
             if cname == origin:
@@ -620,7 +617,9 @@ elif page == "Java Route Finder":
 
         rdata = st.session_state.route_data
         if rdata and rdata["origin"] == origin and rdata["destination"] == destination:
+            all_pts = []
             for r in reversed(rdata["routes"]):
+                all_pts.extend(r["points"])
                 if r["is_main"]:
                     folium.PolyLine(
                         r["points"],
@@ -639,7 +638,10 @@ elif page == "Java Route Finder":
                         tooltip=f"{r['name']} ({r['dist_km']:.1f} km)"
                     ).add_to(m)
 
-        st_folium(m, width=760, height=450, returned_objects=[])
+            if all_pts:
+                m.fit_bounds(all_pts, padding=(25, 25))
+
+        st_folium(m, height=450, use_container_width=True, returned_objects=[])
         st.markdown("""
             <div class="legend-row">
                 <b>Map Legend:</b> &nbsp;
