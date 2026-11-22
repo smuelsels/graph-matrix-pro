@@ -158,4 +158,4 @@ if menu == "Team Member Profiles":
 # HALAMAN 2: GRAPH MATRIX APPLICATION
 # =====================================================================
 elif menu == "Graph Matrix Application":
-    st.markdown("<h1>📊 GRAPH MATRIX APPLICATION</h1>", unsafe_allow_
+st.markdown("<h1>📊 GRAPH MATRIX APPLICATION</h1>", unsafe_allow_html=True)
