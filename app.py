@@ -339,7 +339,7 @@ if page == "Team Profiles":
             "nim": "021202600017",
             "role": "⚙️ DevOps & Project Manager / Team Leader",
             "accent": "#E86A2C",
-            "photo": "assets/samuel.jpg",
+            "photo": "assetssamuel.jpg",
             "contributions": [
                 "Led the team by coordinating tasks and managing timelines.",
                 "Oversaw the entire development workflow.",
@@ -353,7 +353,7 @@ if page == "Team Profiles":
             "nim": "021202600016",
             "role": "🪄 Quality Assurance (QA) & Finalizer",
             "accent": "#D97706",
-            "photo": "assets/meysya.jpg",
+            "photo": "assetsmeysya.jpg",
             "contributions": [
                 "Conducted thorough testing of all features to detect bugs, UI inconsistencies, and functionality issues.",
                 "Reported issues to the developers and verified fixes to ensure the system operated smoothly.",
@@ -367,7 +367,7 @@ if page == "Team Profiles":
             "nim": "021202600026",
             "role": "💻 Back-End Developer & Full-Stack Developer",
             "accent": "#3B82F6",
-            "photo": "assets/abdi.jpg",
+            "photo": "assetsabdi.jpg",
             "contributions": [
                 "Developed the server-side logic and built the core functionalities required for the web application.",
                 "Designed and managed the data flow between the front-end and back-end components.",
