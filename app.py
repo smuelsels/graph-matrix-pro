@@ -390,10 +390,22 @@ if page == "Team Profiles":
 # =====================================================================
 # HALAMAN 2: GRAPH MATRIX APPLICATION
 # =====================================================================
-elif page == "Graph Matrix App":
-    st.markdown("<h1>📊 GRAPH MATRIX APPLICATION</h1>", unsafe_allow_html=True)
+if page == "Graph Matrix App":
+    st.markdown("""
+        <div class="orange-banner">
+            <span style="font-weight:700; font-size:14px;">📊 Graph Matrix Pro • Graph Theory & Adjacency Analysis</span>
+            <span class="banner-pill">NetworkX • Degrees • Matrix Heatmap</span>
+        </div>
+    """, unsafe_allow_html=True)
+    st.markdown("<h1 style='color:#16202A;'>📊 GRAPH MATRIX APPLICATION</h1>", unsafe_allow_html=True)
     st.markdown('<div class="orange-divider"></div>', unsafe_allow_html=True)
-    st.write("This application demonstrates graph theory concepts including graph visualization, node degree calculation, and adjacency matrix representation.")
+    st.markdown(
+        "<p style='color:#52606D; font-size:15px;'>"
+        "This application demonstrates graph theory concepts including graph visualization, "
+        "node degree calculation, and adjacency matrix representation."
+        "</p>",
+        unsafe_allow_html=True
+    )
 
     tab1, tab2, tab3 = st.tabs(["🎲 GRAPH VISUALIZATION", "📈 NODE DEGREES", "🔢 ADJACENCY MATRIX"])
 
@@ -407,6 +419,7 @@ elif page == "Graph Matrix App":
 
         col_left, col_right = st.columns([1, 1.35])
         with col_left:
+            st.markdown('<div class="panel-card">', unsafe_allow_html=True)
             st.subheader("⚙️ GRAPH CONFIGURATION")
             st.markdown("**Create a Random Graph**")
             num_nodes = st.slider("Number of Nodes", min_value=2, max_value=20, value=6)
@@ -423,33 +436,38 @@ elif page == "Graph Matrix App":
                 for u, v in G.edges():
                     G[u][v]["weight"] = int(np.random.randint(1, 20))
                 st.session_state.graph = G
+            st.markdown("</div>", unsafe_allow_html=True)
 
         with col_right:
+            st.markdown('<div class="panel-card">', unsafe_allow_html=True)
             st.subheader("👁️ GRAPH VISUALIZATION")
             G = st.session_state.graph
             if G is None:
                 st.info("👆 Please generate a random graph using the controls on the left to see the visualization here.")
             else:
                 fig, ax = plt.subplots(figsize=(6.5, 4.2))
-                fig.patch.set_facecolor("#FAF4E6")
-                ax.set_facecolor("#FAF4E6")
+                fig.patch.set_facecolor("#FFFFFF")
+                ax.set_facecolor("#FAF7F2")
                 pos = nx.spring_layout(G, seed=42)
                 labels = {n: str(n + 1) for n in G.nodes()}
                 nx.draw(
                     G, pos,
                     labels=labels,
                     with_labels=True,
-                    node_color="#FF7A2F",
-                    node_size=750,
-                    font_color="white",
+                    node_color="#E86A2C",
+                    node_size=760,
+                    font_color="#FFFFFF",
                     font_weight="bold",
-                    edge_color="#444444",
+                    edge_color="#16202A",
+                    edgecolors="#16202A",
+                    linewidths=1.5,
                     width=1.8,
                     ax=ax
                 )
                 plt.tight_layout()
                 st.pyplot(fig, use_container_width=True)
                 plt.close(fig)
+            st.markdown("</div>", unsafe_allow_html=True)
 
     # --- TAB 2 ---
     with tab2:
@@ -471,44 +489,48 @@ elif page == "Graph Matrix App":
             min_deg = min(degrees) if degrees else 0
 
             with c_left:
+                st.markdown('<div class="panel-card">', unsafe_allow_html=True)
                 st.subheader("📊 NODE DEGREES CALCULATION")
                 fig, ax = plt.subplots(figsize=(6.5, 4.4))
-                fig.patch.set_facecolor("#FAF4E6")
-                ax.set_facecolor("#FAF4E6")
+                fig.patch.set_facecolor("#FFFFFF")
+                ax.set_facecolor("#FAF7F2")
 
                 colors = []
                 for d in degrees:
                     if d == max_deg and max_deg > min_deg:
-                        colors.append("#FF6A1A")
+                        colors.append("#E86A2C")
                     elif d == min_deg and max_deg > min_deg:
-                        colors.append("#1E1E1E")
+                        colors.append("#16202A")
                     else:
-                        colors.append("#F3E5C8")
+                        colors.append("#F3E5D0")
 
-                bars = ax.bar(node_labels, degrees, color=colors, edgecolor="#1E1E1E", linewidth=1.2)
+                bars = ax.bar(node_labels, degrees, color=colors, edgecolor="#16202A", linewidth=1.2)
                 for bar, d in zip(bars, degrees):
                     ax.text(
                         bar.get_x() + bar.get_width() / 2,
                         bar.get_height() + 0.06,
                         str(d),
-                        ha="center", va="bottom", fontweight="bold", fontsize=9.5, color="#1E1E1E"
+                        ha="center", va="bottom", fontweight="bold", fontsize=9.5, color="#16202A"
                     )
 
-                ax.set_title("Node Degrees Distribution", fontweight="bold", fontsize=12)
-                ax.set_xlabel("Nodes", fontweight="bold")
-                ax.set_ylabel("Degree", fontweight="bold")
+                ax.set_title("Node Degrees Distribution", fontweight="bold", fontsize=12, color="#16202A")
+                ax.set_xlabel("Nodes", fontweight="bold", color="#16202A")
+                ax.set_ylabel("Degree", fontweight="bold", color="#16202A")
+                ax.tick_params(colors="#16202A")
                 ax.grid(axis="y", linestyle="--", alpha=0.35)
                 plt.tight_layout()
                 st.pyplot(fig, use_container_width=True)
                 plt.close(fig)
+                st.markdown("</div>", unsafe_allow_html=True)
 
             with c_right:
+                st.markdown('<div class="panel-card">', unsafe_allow_html=True)
                 st.subheader("📈 DEGREE STATISTICS")
                 st.markdown("**Degree of Each Node:**")
                 for lbl, d in zip(node_labels, degrees):
                     st.markdown(f"Node {lbl}: {d} connection(s)")
 
-                st.markdown("<hr style='border-color:#D5CBB8;'>", unsafe_allow_html=True)
+                st.markdown("<hr style='border-color:#EAE2D3;'>", unsafe_allow_html=True)
                 avg_deg = float(np.mean(degrees)) if degrees else 0.0
                 tot_deg = int(np.sum(degrees)) if degrees else 0
 
@@ -518,13 +540,14 @@ elif page == "Graph Matrix App":
                 s3.metric("Average Degree", f"{avg_deg:.2f}")
                 s4.metric("Total Degree", tot_deg)
 
-                st.markdown("<hr style='border-color:#D5CBB8;'>", unsafe_allow_html=True)
+                st.markdown("<hr style='border-color:#EAE2D3;'>", unsafe_allow_html=True)
                 st.subheader("📋 GRAPH PROPERTIES")
                 is_conn = "Yes" if nx.is_connected(G) else "No"
                 num_comp = nx.number_connected_components(G)
                 gp1, gp2 = st.columns(2)
                 gp1.markdown(f"**Is Connected:** {is_conn}")
                 gp2.markdown(f"**Number of Components:** {num_comp}")
+                st.markdown("</div>", unsafe_allow_html=True)
 
     # --- TAB 3 ---
     with tab3:
@@ -544,10 +567,13 @@ elif page == "Graph Matrix App":
             df_adj = pd.DataFrame(adj, index=labels, columns=labels)
 
             with c_left:
+                st.markdown('<div class="panel-card">', unsafe_allow_html=True)
                 st.subheader("🔢 ADJACENCY MATRIX")
                 st.dataframe(df_adj, use_container_width=True)
+                st.markdown("</div>", unsafe_allow_html=True)
 
             with c_right:
+                st.markdown('<div class="panel-card">', unsafe_allow_html=True)
                 st.subheader("📊 MATRIX PROPERTIES")
                 shape_val = adj.shape
                 total_elem = int(adj.size)
@@ -564,26 +590,33 @@ elif page == "Graph Matrix App":
                 mp2.markdown(f"**Symmetric:** {is_sym}")
                 mp2.markdown(f"**Trace:** {trace_val:.1f}")
 
-                st.markdown("<hr style='border-color:#D5CBB8;'>", unsafe_allow_html=True)
+                st.markdown("<hr style='border-color:#EAE2D3;'>", unsafe_allow_html=True)
                 st.subheader("🎨 MATRIX HEATMAP")
                 fig_h, ax_h = plt.subplots(figsize=(6, 3.6))
-                fig_h.patch.set_facecolor("#FAF4E6")
+                fig_h.patch.set_facecolor("#FFFFFF")
                 im = ax_h.imshow(adj, cmap="Oranges")
                 ax_h.set_xticks(range(len(labels)))
                 ax_h.set_yticks(range(len(labels)))
-                ax_h.set_xticklabels(labels)
-                ax_h.set_yticklabels(labels)
-                ax_h.set_title("Adjacency Matrix Heatmap", fontweight="bold")
+                ax_h.set_xticklabels(labels, color="#16202A")
+                ax_h.set_yticklabels(labels, color="#16202A")
+                ax_h.set_title("Adjacency Matrix Heatmap", fontweight="bold", color="#16202A")
                 fig_h.colorbar(im, ax=ax_h)
                 plt.tight_layout()
                 st.pyplot(fig_h, use_container_width=True)
                 plt.close(fig_h)
+                st.markdown("</div>", unsafe_allow_html=True)
 
 # =====================================================================
 # HALAMAN 3: JAVA ISLAND ROUTE PLANNER
 # =====================================================================
 elif page == "Java Route Finder":
-    st.markdown("<h1>🗺️ JAVA ISLAND ROUTE PLANNER</h1>", unsafe_allow_html=True)
+    st.markdown("""
+        <div class="orange-banner">
+            <span style="font-weight:700; font-size:14px;">🗺️ Graph Matrix Pro • Java Island Route Planner</span>
+            <span class="banner-pill">OSRM Road Routing • Alternative Paths</span>
+        </div>
+    """, unsafe_allow_html=True)
+    st.markdown("<h1 style='color:#16202A;'>🗺️ JAVA ISLAND ROUTE PLANNER</h1>", unsafe_allow_html=True)
     st.markdown('<div class="orange-divider"></div>', unsafe_allow_html=True)
 
     p1, p2 = st.columns(2)
@@ -596,6 +629,7 @@ elif page == "Java Route Finder":
     city_names = list(CITIES.keys())
 
     with col_ctrl:
+        st.markdown('<div class="panel-card">', unsafe_allow_html=True)
         st.subheader("📍 SELECT YOUR ROUTE")
         origin = st.selectbox("🚗 Origin City", city_names, index=0)
         default_dest_idx = city_names.index("Surakarta (Solo)") if "Surakarta (Solo)" in city_names else 1
@@ -657,25 +691,27 @@ elif page == "Java Route Finder":
                     st.success(f"**{r['name']}:** {r['dist_km']:.1f} km | ~{r['dur_hr']:.1f} jam")
                 else:
                     st.info(f"**{r['name']}:** {r['dist_km']:.1f} km | ~{r['dur_hr']:.1f} jam")
+        st.markdown("</div>", unsafe_allow_html=True)
 
     with col_map:
+        st.markdown('<div class="panel-card">', unsafe_allow_html=True)
         st.subheader("🗺️ INTERACTIVE JAVA MAP")
-        m = folium.Map(location=[-6.6, 107.2], zoom_start=8, tiles="OpenStreetMap")
+        m = folium.Map(location=[-7.35, 110.2], zoom_start=7, tiles="OpenStreetMap")
 
         for cname, (clat, clon) in CITIES.items():
             if cname == origin:
                 folium.CircleMarker(
-                    [clat, clon], radius=7, color="#16A34A", fill=True, fill_color="#22C55E",
+                    [clat, clon], radius=7.5, color="#15803D", fill=True, fill_color="#22C55E",
                     fill_opacity=0.95, tooltip=f"Start City: {cname}"
                 ).add_to(m)
             elif cname == destination:
                 folium.CircleMarker(
-                    [clat, clon], radius=7, color="#DC2626", fill=True, fill_color="#EF4444",
+                    [clat, clon], radius=7.5, color="#B91C1C", fill=True, fill_color="#EF4444",
                     fill_opacity=0.95, tooltip=f"Destination: {cname}"
                 ).add_to(m)
             else:
                 folium.CircleMarker(
-                    [clat, clon], radius=4.5, color="#374151", fill=True, fill_color="#4B5563",
+                    [clat, clon], radius=4.5, color="#16202A", fill=True, fill_color="#475569",
                     fill_opacity=0.85, tooltip=f"Other City: {cname}"
                 ).add_to(m)
 
@@ -687,17 +723,17 @@ elif page == "Java Route Finder":
                 if r["is_main"]:
                     folium.PolyLine(
                         r["points"],
-                        color="#FF7A2F" if not rdata["straight"] else "#2563EB",
+                        color="#E86A2C" if not rdata["straight"] else "#2563EB",
                         weight=5,
-                        opacity=0.9,
+                        opacity=0.92,
                         tooltip=r["name"]
                     ).add_to(m)
                 else:
                     folium.PolyLine(
                         r["points"],
-                        color="#6B7280",
+                        color="#475569",
                         weight=3.5,
-                        opacity=0.7,
+                        opacity=0.72,
                         dash_array="6",
                         tooltip=f"{r['name']} ({r['dist_km']:.1f} km)"
                     ).add_to(m)
@@ -705,7 +741,7 @@ elif page == "Java Route Finder":
             if all_pts:
                 m.fit_bounds(all_pts, padding=(25, 25))
 
-        st_folium(m, height=450, use_container_width=True, returned_objects=[])
+        st_folium(m, height=440, use_container_width=True, returned_objects=[])
         st.markdown("""
             <div class="legend-row">
                 <b>Map Legend:</b> &nbsp;
@@ -715,6 +751,7 @@ elif page == "Java Route Finder":
                 ⚫ Other Cities
             </div>
         """, unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
 # --- FOOTER ---
 st.markdown("""
