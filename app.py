@@ -19,43 +19,43 @@ st.set_page_config(
 
 
 def make_avatar_data_uri(name: str, accent: str = "#E86A2C") -> str:
-    """Membuat avatar SVG bersih bertema hangat jika foto lokal belum tersedia."""
+    """Membuat avatar SVG bertema gelap dan aksen hangat."""
     parts = [p[0].upper() for p in name.strip().split() if p]
     initials = "".join(parts[:2]) or "GM"
     svg = f"""
     <svg xmlns="http://www.w3.org/2000/svg" width="220" height="250" viewBox="0 0 220 250">
         <defs>
             <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#1E2B37"/>
-                <stop offset="100%" stop-color="#2F4152"/>
+                <stop offset="0%" stop-color="#141C24"/>
+                <stop offset="100%" stop-color="#22303F"/>
             </linearGradient>
         </defs>
         <rect width="220" height="250" rx="18" fill="url(#bg)"/>
         <circle cx="110" cy="96" r="44" fill="{accent}" opacity="0.92"/>
         <text x="110" y="110" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="34" font-weight="bold">{initials}</text>
-        <rect x="34" y="162" width="152" height="6" rx="3" fill="{accent}" opacity="0.7"/>
-        <text x="110" y="192" text-anchor="middle" fill="#F8F5EE" font-family="Arial, sans-serif" font-size="14" font-weight="bold">{urllib.parse.quote(name.split()[0])}</text>
-        <text x="110" y="213" text-anchor="middle" fill="#B8C4D0" font-family="Arial, sans-serif" font-size="11">Graph Matrix Pro</text>
+        <rect x="34" y="162" width="152" height="6" rx="3" fill="{accent}" opacity="0.75"/>
+        <text x="110" y="192" text-anchor="middle" fill="#F3F6F9" font-family="Arial, sans-serif" font-size="14" font-weight="bold">{urllib.parse.quote(name.split()[0])}</text>
+        <text x="110" y="213" text-anchor="middle" fill="#9AA7B4" font-family="Arial, sans-serif" font-size="11">Graph Matrix Pro</text>
     </svg>
     """.strip()
     encoded = base64.b64encode(svg.encode("utf-8")).decode("utf-8")
     return f"data:image/svg+xml;base64,{encoded}"
 
 
-# --- CUSTOM CSS (Palet Warm Ivory, Slate Navy & Terracotta Amber) ---
+# --- CUSTOM CSS (Tema Hitam / Dark Slate & Terracotta Amber) ---
 st.markdown("""
 <style>
     .stApp {
-        background-color: #F8F5EE;
-        color: #16202A;
+        background-color: #0F141A;
+        color: #F3F6F9;
     }
     section[data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #16202A 0%, #1E2C3A 100%);
-        color: #F8F5EE;
+        background: linear-gradient(180deg, #0B0F14 0%, #141B24 100%);
+        color: #F3F6F9;
         border-right: 1px solid rgba(255, 255, 255, 0.08);
     }
     section[data-testid="stSidebar"] * {
-        color: #F8F5EE;
+        color: #F3F6F9;
     }
     .sidebar-brand {
         font-size: 19px;
@@ -66,16 +66,17 @@ st.markdown("""
     }
     .sidebar-sub {
         font-size: 12px;
-        color: #B6C2CE !important;
+        color: #9AA7B4 !important;
         margin-bottom: 14px;
     }
     .orange-banner {
-        background: linear-gradient(120deg, #16202A 0%, #273849 52%, #E86A2C 100%);
+        background: linear-gradient(120deg, #16202A 0%, #243342 52%, #E86A2C 100%);
         padding: 14px 22px;
         border-radius: 14px;
         margin-bottom: 22px;
         color: #FFFFFF;
-        box-shadow: 0 6px 18px rgba(22, 32, 42, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -100,19 +101,19 @@ st.markdown("""
         margin-bottom: 18px;
     }
     .top-pill-card {
-        background-color: #FFFFFF;
+        background-color: #171E27;
         height: 14px;
         border-radius: 999px;
         border-left: 10px solid #E86A2C;
-        box-shadow: 0 3px 10px rgba(22, 32, 42, 0.05);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
         margin-bottom: 16px;
     }
     .panel-card {
-        background-color: #FFFFFF;
+        background-color: #171E27;
         padding: 20px 22px;
         border-radius: 16px;
-        border: 1px solid #EAE2D3;
-        box-shadow: 0 6px 18px rgba(22, 32, 42, 0.06);
+        border: 1px solid #26313F;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
         margin-bottom: 16px;
     }
     div.stButton > button {
@@ -124,7 +125,7 @@ st.markdown("""
         width: 100%;
         padding: 10px 14px;
         text-align: center;
-        box-shadow: 0 4px 10px rgba(232, 106, 44, 0.24);
+        box-shadow: 0 4px 12px rgba(232, 106, 44, 0.35);
         transition: all 0.2s ease;
     }
     div.stButton > button:hover {
@@ -133,11 +134,11 @@ st.markdown("""
         transform: translateY(-1px);
     }
     .profile-card {
-        background-color: #FFFFFF;
+        background-color: #171E27;
         padding: 22px 20px;
         border-radius: 16px;
-        border: 1px solid #EAE2D3;
-        box-shadow: 0 6px 18px rgba(22, 32, 42, 0.06);
+        border: 1px solid #26313F;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
         text-align: center;
         margin-top: 10px;
     }
@@ -145,18 +146,18 @@ st.markdown("""
         font-size: 18px;
         font-weight: 800;
         margin: 6px 0 4px 0;
-        color: #16202A;
+        color: #FFFFFF;
     }
     .profile-nim {
         font-size: 13px;
         font-weight: 700;
-        color: #52606D;
+        color: #9AA7B4;
         margin-bottom: 10px;
     }
     .role-badge {
-        background-color: #FFF1EA;
-        color: #C84F16;
-        border: 1px solid #F6C3A8;
+        background-color: rgba(232, 106, 44, 0.16);
+        color: #FF9A66;
+        border: 1px solid rgba(232, 106, 44, 0.45);
         padding: 7px 14px;
         border-radius: 18px;
         font-size: 12px;
@@ -167,7 +168,7 @@ st.markdown("""
     .contrib-box {
         text-align: left;
         font-size: 13.5px;
-        color: #24303C;
+        color: #DCE3EA;
     }
     .contrib-box ul {
         padding-left: 18px;
@@ -177,61 +178,64 @@ st.markdown("""
         margin-bottom: 6px;
     }
     .overview-card {
-        background-color: #FFFFFF;
+        background-color: #171E27;
         padding: 22px 24px;
         border-radius: 16px;
-        border: 1px solid #EAE2D3;
-        border-top: 4px solid #16202A;
-        box-shadow: 0 6px 16px rgba(22, 32, 42, 0.06);
+        border: 1px solid #26313F;
+        border-top: 4px solid #E86A2C;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.28);
         height: 100%;
     }
     .overview-card ul {
         padding-left: 18px;
         margin-top: 10px;
         font-size: 14px;
-        color: #24303C;
+        color: #DCE3EA;
     }
     .overview-card li {
         margin-bottom: 6px;
     }
     .legend-row {
-        background-color: #FFFFFF;
-        border: 1px solid #EAE2D3;
+        background-color: #121820;
+        border: 1px solid #26313F;
         border-radius: 10px;
         padding: 8px 14px;
         font-size: 12.5px;
         font-weight: 600;
         margin-top: 8px;
-        color: #16202A;
+        color: #E6EDF3;
     }
     .footer {
         text-align: center;
         font-size: 12px;
         font-weight: 700;
-        color: #52606D;
+        color: #8D99A6;
         margin-top: 45px;
         padding-top: 16px;
-        border-top: 1px solid #DFD5C5;
+        border-top: 1px solid #232D3B;
     }
     div[data-testid="stAlert"] {
+        background-color: #1A222D !important;
         border-radius: 12px !important;
-        border: 1px solid #EAE2D3 !important;
-        box-shadow: 0 4px 12px rgba(22, 32, 42, 0.05) !important;
+        border: 1px solid #2D3A4B !important;
+        color: #F3F6F9 !important;
     }
-    /* Memaksa ketiga tulisan tab menjadi hitam */
     button[data-baseweb="tab"],
     button[data-baseweb="tab"] p,
     button[data-baseweb="tab"] div,
     button[data-baseweb="tab"] span {
-        color: #16202A !important;
+        color: #E6EDF3 !important;
         font-weight: 700 !important;
     }
     button[data-baseweb="tab"][aria-selected="true"],
     button[data-baseweb="tab"][aria-selected="true"] p,
     button[data-baseweb="tab"][aria-selected="true"] div,
     button[data-baseweb="tab"][aria-selected="true"] span {
-        color: #16202A !important;
+        color: #FF8A4C !important;
         border-bottom-color: #E86A2C !important;
+    }
+    h1, h2, h3, h4, p, label, .stMarkdown {
+        color: #F3F6F9;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -317,8 +321,8 @@ if page == "Team Profiles":
             <span class="banner-pill">Graph Theory • Adjacency Matrix • Java Routing</span>
         </div>
     """, unsafe_allow_html=True)
-    st.markdown("<h1 style='text-align:center; letter-spacing:1px; color:#16202A;'>TEAM MEMBER PROFILES</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align:center; font-size:17px; font-weight:600; color:#52606D; margin-bottom:20px;'>Meet the talented team behind Graph Matrix Pro</p>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align:center; letter-spacing:1px; color:#FFFFFF;'>TEAM MEMBER PROFILES</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align:center; font-size:17px; font-weight:600; color:#9AA7B4; margin-bottom:20px;'>Meet the talented team behind Graph Matrix Pro</p>", unsafe_allow_html=True)
 
     team = [
         {
@@ -351,7 +355,7 @@ if page == "Team Profiles":
             "name": "ABDI",
             "nim": "021202600026",
             "role": "💻 Back-End Developer & Full-Stack Developer",
-            "accent": "#2B6CB0",
+            "accent": "#3B82F6",
             "contributions": [
                 "Developed the server-side logic and built the core functionalities required for the web application.",
                 "Designed and managed the data flow between the front-end and back-end components.",
@@ -382,7 +386,7 @@ if page == "Team Profiles":
                 </div>
             """, unsafe_allow_html=True)
 
-    st.markdown("<hr style='border-color:#DFD5C5; margin:34px 0 22px 0;'>", unsafe_allow_html=True)
+    st.markdown("<hr style='border-color:#232D3B; margin:34px 0 22px 0;'>", unsafe_allow_html=True)
     st.markdown("<h2>📋 PROJECT OVERVIEW</h2>", unsafe_allow_html=True)
     st.markdown('<div class="orange-divider"></div>', unsafe_allow_html=True)
 
@@ -424,10 +428,10 @@ elif page == "Graph Matrix App":
             <span class="banner-pill">NetworkX • Degrees • Matrix Heatmap</span>
         </div>
     """, unsafe_allow_html=True)
-    st.markdown("<h1 style='color:#16202A;'>📊 GRAPH MATRIX APPLICATION</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='color:#FFFFFF;'>📊 GRAPH MATRIX APPLICATION</h1>", unsafe_allow_html=True)
     st.markdown('<div class="orange-divider"></div>', unsafe_allow_html=True)
     st.markdown(
-        "<p style='color:#52606D; font-size:15px;'>"
+        "<p style='color:#9AA7B4; font-size:15px;'>"
         "This application demonstrates graph theory concepts including graph visualization, "
         "node degree calculation, and adjacency matrix representation."
         "</p>",
@@ -466,14 +470,14 @@ elif page == "Graph Matrix App":
 
         with col_right:
             st.markdown('<div class="panel-card">', unsafe_allow_html=True)
-            st.markdown("<h3 style='color:#16202A; margin-top:0;'>👁️ GRAPH VISUALIZATION</h3>", unsafe_allow_html=True)
+            st.markdown("<h3 style='color:#FFFFFF; margin-top:0;'>👁️ GRAPH VISUALIZATION</h3>", unsafe_allow_html=True)
             G = st.session_state.graph
             if G is None:
                 st.info("👆 Please generate a random graph using the controls on the left to see the visualization here.")
             else:
                 fig, ax = plt.subplots(figsize=(6.5, 4.2))
-                fig.patch.set_facecolor("#FFFFFF")
-                ax.set_facecolor("#FAF7F2")
+                fig.patch.set_facecolor("#171E27")
+                ax.set_facecolor("#121820")
                 pos = nx.spring_layout(G, seed=42)
                 labels = {n: str(n + 1) for n in G.nodes()}
                 nx.draw(
@@ -484,9 +488,9 @@ elif page == "Graph Matrix App":
                     node_size=760,
                     font_color="#FFFFFF",
                     font_weight="bold",
-                    edge_color="#16202A",
-                    edgecolors="#16202A",
-                    linewidths=1.5,
+                    edge_color="#9AA7B4",
+                    edgecolors="#FFFFFF",
+                    linewidths=1.4,
                     width=1.8,
                     ax=ax
                 )
@@ -517,32 +521,36 @@ elif page == "Graph Matrix App":
                 st.markdown('<div class="panel-card">', unsafe_allow_html=True)
                 st.subheader("📊 NODE DEGREES CALCULATION")
                 fig, ax = plt.subplots(figsize=(6.5, 4.4))
-                fig.patch.set_facecolor("#FFFFFF")
-                ax.set_facecolor("#FAF7F2")
+                fig.patch.set_facecolor("#171E27")
+                ax.set_facecolor("#121820")
 
                 colors = []
                 for d in degrees:
                     if d == max_deg and max_deg > min_deg:
                         colors.append("#E86A2C")
                     elif d == min_deg and max_deg > min_deg:
-                        colors.append("#16202A")
+                        colors.append("#3B82F6")
                     else:
-                        colors.append("#F3E5D0")
+                        colors.append("#2D3B4E")
 
-                bars = ax.bar(node_labels, degrees, color=colors, edgecolor="#16202A", linewidth=1.2)
+                bars = ax.bar(node_labels, degrees, color=colors, edgecolor="#F3F6F9", linewidth=1.0)
                 for bar, d in zip(bars, degrees):
                     ax.text(
                         bar.get_x() + bar.get_width() / 2,
                         bar.get_height() + 0.06,
                         str(d),
-                        ha="center", va="bottom", fontweight="bold", fontsize=9.5, color="#16202A"
+                        ha="center", va="bottom", fontweight="bold", fontsize=9.5, color="#F3F6F9"
                     )
 
-                ax.set_title("Node Degrees Distribution", fontweight="bold", fontsize=12, color="#16202A")
-                ax.set_xlabel("Nodes", fontweight="bold", color="#16202A")
-                ax.set_ylabel("Degree", fontweight="bold", color="#16202A")
-                ax.tick_params(colors="#16202A")
-                ax.grid(axis="y", linestyle="--", alpha=0.35)
+                ax.set_title("Node Degrees Distribution", fontweight="bold", fontsize=12, color="#FFFFFF")
+                ax.set_xlabel("Nodes", fontweight="bold", color="#E6EDF3")
+                ax.set_ylabel("Degree", fontweight="bold", color="#E6EDF3")
+                ax.tick_params(colors="#E6EDF3")
+                ax.spines["top"].set_visible(False)
+                ax.spines["right"].set_visible(False)
+                ax.spines["bottom"].set_color("#3A485C")
+                ax.spines["left"].set_color("#3A485C")
+                ax.grid(axis="y", linestyle="--", alpha=0.25, color="#9AA7B4")
                 plt.tight_layout()
                 st.pyplot(fig, use_container_width=True)
                 plt.close(fig)
@@ -555,7 +563,7 @@ elif page == "Graph Matrix App":
                 for lbl, d in zip(node_labels, degrees):
                     st.markdown(f"Node {lbl}: {d} connection(s)")
 
-                st.markdown("<hr style='border-color:#EAE2D3;'>", unsafe_allow_html=True)
+                st.markdown("<hr style='border-color:#26313F;'>", unsafe_allow_html=True)
                 avg_deg = float(np.mean(degrees)) if degrees else 0.0
                 tot_deg = int(np.sum(degrees)) if degrees else 0
 
@@ -565,7 +573,7 @@ elif page == "Graph Matrix App":
                 s3.metric("Average Degree", f"{avg_deg:.2f}")
                 s4.metric("Total Degree", tot_deg)
 
-                st.markdown("<hr style='border-color:#EAE2D3;'>", unsafe_allow_html=True)
+                st.markdown("<hr style='border-color:#26313F;'>", unsafe_allow_html=True)
                 st.subheader("📋 GRAPH PROPERTIES")
                 is_conn = "Yes" if nx.is_connected(G) else "No"
                 num_comp = nx.number_connected_components(G)
@@ -614,17 +622,20 @@ elif page == "Graph Matrix App":
                 mp2.markdown(f"**Symmetric:** {is_sym}")
                 mp2.markdown(f"**Trace:** {trace_val:.1f}")
 
-                st.markdown("<hr style='border-color:#EAE2D3;'>", unsafe_allow_html=True)
+                st.markdown("<hr style='border-color:#26313F;'>", unsafe_allow_html=True)
                 st.subheader("🎨 MATRIX HEATMAP")
                 fig_h, ax_h = plt.subplots(figsize=(6, 3.6))
-                fig_h.patch.set_facecolor("#FFFFFF")
+                fig_h.patch.set_facecolor("#171E27")
+                ax_h.set_facecolor("#121820")
                 im = ax_h.imshow(adj, cmap="Oranges")
                 ax_h.set_xticks(range(len(labels)))
                 ax_h.set_yticks(range(len(labels)))
-                ax_h.set_xticklabels(labels, color="#16202A")
-                ax_h.set_yticklabels(labels, color="#16202A")
-                ax_h.set_title("Adjacency Matrix Heatmap", fontweight="bold", color="#16202A")
-                fig_h.colorbar(im, ax=ax_h)
+                ax_h.set_xticklabels(labels, color="#E6EDF3")
+                ax_h.set_yticklabels(labels, color="#E6EDF3")
+                ax_h.set_title("Adjacency Matrix Heatmap", fontweight="bold", color="#FFFFFF")
+                cbar = fig_h.colorbar(im, ax=ax_h)
+                cbar.ax.yaxis.set_tick_params(color="#E6EDF3")
+                plt.setp(cbar.ax.get_yticklabels(), color="#E6EDF3")
                 plt.tight_layout()
                 st.pyplot(fig_h, use_container_width=True)
                 plt.close(fig_h)
@@ -640,7 +651,7 @@ elif page == "Java Route Finder":
             <span class="banner-pill">OSRM Road Routing • Alternative Paths</span>
         </div>
     """, unsafe_allow_html=True)
-    st.markdown("<h1 style='color:#16202A;'>🗺️ JAVA ISLAND ROUTE PLANNER</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='color:#FFFFFF;'>🗺️ JAVA ISLAND ROUTE PLANNER</h1>", unsafe_allow_html=True)
     st.markdown('<div class="orange-divider"></div>', unsafe_allow_html=True)
 
     p1, p2 = st.columns(2)
@@ -747,7 +758,7 @@ elif page == "Java Route Finder":
                 if r["is_main"]:
                     folium.PolyLine(
                         r["points"],
-                        color="#E86A2C" if not rdata["straight"] else "#2563EB",
+                        color="#E86A2C" if not rdata["straight"] else "#3B82F6",
                         weight=5,
                         opacity=0.92,
                         tooltip=r["name"]
@@ -755,9 +766,9 @@ elif page == "Java Route Finder":
                 else:
                     folium.PolyLine(
                         r["points"],
-                        color="#475569",
+                        color="#94A3B8",
                         weight=3.5,
-                        opacity=0.72,
+                        opacity=0.75,
                         dash_array="6",
                         tooltip=f"{r['name']} ({r['dist_km']:.1f} km)"
                     ).add_to(m)
