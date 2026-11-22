@@ -1,4 +1,5 @@
 import base64
+import os
 import urllib.parse
 import folium
 import matplotlib.pyplot as plt
@@ -19,7 +20,7 @@ st.set_page_config(
 
 
 def make_avatar_data_uri(name: str, accent: str = "#E86A2C") -> str:
-    """Membuat avatar SVG bertema gelap dan aksen hangat."""
+    """Membuat avatar SVG bertema gelap dan aksen hangat jika foto belum tersedia."""
     parts = [p[0].upper() for p in name.strip().split() if p]
     initials = "".join(parts[:2]) or "GM"
     svg = f"""
@@ -40,6 +41,14 @@ def make_avatar_data_uri(name: str, accent: str = "#E86A2C") -> str:
     """.strip()
     encoded = base64.b64encode(svg.encode("utf-8")).decode("utf-8")
     return f"data:image/svg+xml;base64,{encoded}"
+
+
+def get_member_image(member: dict):
+    """Mengembalikan path file foto lokal jika ada, atau fallback ke avatar SVG."""
+    photo_path = member.get("photo")
+    if photo_path and os.path.isfile(photo_path):
+        return photo_path
+    return make_avatar_data_uri(member["name"], member["accent"])
 
 
 # --- CUSTOM CSS (Tema Hitam / Dark Slate & Terracotta Amber) ---
@@ -330,6 +339,7 @@ if page == "Team Profiles":
             "nim": "021202600017",
             "role": "⚙️ DevOps & Project Manager / Team Leader",
             "accent": "#E86A2C",
+            "photo": "assets/samuel.jpg",
             "contributions": [
                 "Led the team by coordinating tasks and managing timelines.",
                 "Oversaw the entire development workflow.",
@@ -343,6 +353,7 @@ if page == "Team Profiles":
             "nim": "021202600016",
             "role": "🪄 Quality Assurance (QA) & Finalizer",
             "accent": "#D97706",
+            "photo": "assets/meysya.jpg",
             "contributions": [
                 "Conducted thorough testing of all features to detect bugs, UI inconsistencies, and functionality issues.",
                 "Reported issues to the developers and verified fixes to ensure the system operated smoothly.",
@@ -356,6 +367,7 @@ if page == "Team Profiles":
             "nim": "021202600026",
             "role": "💻 Back-End Developer & Full-Stack Developer",
             "accent": "#3B82F6",
+            "photo": "assets/abdi.jpg",
             "contributions": [
                 "Developed the server-side logic and built the core functionalities required for the web application.",
                 "Designed and managed the data flow between the front-end and back-end components.",
@@ -371,7 +383,7 @@ if page == "Team Profiles":
         with col:
             _, img_c, _ = st.columns([1, 2, 1])
             with img_c:
-                st.image(make_avatar_data_uri(member["name"], member["accent"]), width=185)
+                st.image(get_member_image(member), width=185)
 
             bullets = "".join(f"<li>{item}</li>" for item in member["contributions"])
             st.markdown(f"""
