@@ -327,21 +327,21 @@ if page == "Team Profiles":
             "nim": "021202600017",
             "role": "⚙️ DevOps & Project Manager / Team Leader",
             "accent": "#E86A2C",
-            "photo": "assets/samuel.jpg"
+            "photo": "assetssamuel.jpg"
         },
         {
             "name": "MEYSYA RAHMADIYAH",
             "nim": "021202600016",
             "role": "🪄 Quality Assurance (QA) & Finalizer",
             "accent": "#D97706",
-            "photo": "assets/meysya.jpg"
+            "photo": "assetsmeysya.jpg"
         },
         {
             "name": "ABDI",
             "nim": "021202600026",
             "role": "💻 Back-End Developer & Full-Stack Developer",
             "accent": "#3B82F6",
-            "photo": "assets/abdi.jpg"
+            "photo": "assetsabdi.jpg"
         }
     ]
 
