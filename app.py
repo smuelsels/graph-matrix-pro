@@ -516,7 +516,145 @@ elif page == "Graph Matrix App":
                 st.pyplot(fig_h, use_container_width=True)
                 plt.close(fig_h)
 
-File "/mount/src/graph-matrix-pro/app.py", line 656
-  st.markdown("""
-             ^
-SyntaxError: '(' was never closed
+# =====================================================================
+# HALAMAN 3: JAVA ISLAND ROUTE PLANNER
+# =====================================================================
+elif page == "Java Route Finder":
+    st.markdown("<h1>🗺️ JAVA ISLAND ROUTE PLANNER</h1>", unsafe_allow_html=True)
+    st.markdown('<div class="orange-divider"></div>', unsafe_allow_html=True)
+
+    p1, p2 = st.columns(2)
+    with p1:
+        st.markdown('<div class="top-pill-card"></div>', unsafe_allow_html=True)
+    with p2:
+        st.markdown('<div class="top-pill-card"></div>', unsafe_allow_html=True)
+
+    col_ctrl, col_map = st.columns([1, 1.45])
+    city_names = list(CITIES.keys())
+
+    with col_ctrl:
+        st.subheader("📍 SELECT YOUR ROUTE")
+        origin = st.selectbox("🚗 Origin City", city_names, index=0)
+        default_dest_idx = city_names.index("Surakarta (Solo)") if "Surakarta (Solo)" in city_names else 1
+        destination = st.selectbox("🎯 Destination City", city_names, index=default_dest_idx)
+
+        st.subheader("🛠️ Routing Options")
+        use_osrm = st.checkbox("Use OSRM for accurate routing (recommended)", value=True)
+        show_alt = st.checkbox("Show alternative routes", value=True)
+
+        if st.button("🔍 FIND ROUTES"):
+            if origin == destination:
+                st.warning("Kota asal dan tujuan tidak boleh sama.")
+            else:
+                lat1, lon1 = CITIES[origin]
+                lat2, lon2 = CITIES[destination]
+                if use_osrm:
+                    alt_str = "true" if show_alt else "false"
+                    url = (
+                        f"http://router.project-osrm.org/route/v1/driving/"
+                        f"{lon1},{lat1};{lon2},{lat2}?overview=full&geometries=geojson&alternatives={alt_str}"
+                    )
+                    try:
+                        res = requests.get(url, timeout=10).json()
+                        routes_out = []
+                        for idx, r in enumerate(res.get("routes", [])):
+                            pts = [(c[1], c[0]) for c in r["geometry"]["coordinates"]]
+                            routes_out.append({
+                                "name": "Main Route" if idx == 0 else f"Alternative {idx}",
+                                "points": pts,
+                                "dist_km": r["distance"] / 1000,
+                                "dur_hr": r["duration"] / 3600,
+                                "is_main": idx == 0
+                            })
+                        st.session_state.route_data = {
+                            "origin": origin,
+                            "destination": destination,
+                            "straight": False,
+                            "routes": routes_out
+                        }
+                    except requests.RequestException:
+                        st.error("Gagal terhubung ke server OSRM.")
+                else:
+                    st.session_state.route_data = {
+                        "origin": origin,
+                        "destination": destination,
+                        "straight": True,
+                        "routes": [{
+                            "name": "Direct Line",
+                            "points": [(lat1, lon1), (lat2, lon2)],
+                            "dist_km": None,
+                            "dur_hr": None,
+                            "is_main": True
+                        }]
+                    }
+
+        if st.session_state.route_data and not st.session_state.route_data["straight"]:
+            for r in st.session_state.route_data["routes"]:
+                if r["is_main"]:
+                    st.success(f"**{r['name']}:** {r['dist_km']:.1f} km | ~{r['dur_hr']:.1f} jam")
+                else:
+                    st.info(f"**{r['name']}:** {r['dist_km']:.1f} km | ~{r['dur_hr']:.1f} jam")
+
+    with col_map:
+        st.subheader("🗺️ INTERACTIVE JAVA MAP")
+        m = folium.Map(location=[-7.35, 110.2], zoom_start=7, tiles="CartoDB positron")
+
+        lat1, lon1 = CITIES[origin]
+        lat2, lon2 = CITIES[destination]
+
+        # Marker semua kota di Pulau Jawa (seperti di screenshot)
+        for cname, (clat, clon) in CITIES.items():
+            if cname == origin:
+                folium.CircleMarker(
+                    [clat, clon], radius=7, color="#16A34A", fill=True, fill_color="#22C55E",
+                    fill_opacity=0.95, tooltip=f"Start City: {cname}"
+                ).add_to(m)
+            elif cname == destination:
+                folium.CircleMarker(
+                    [clat, clon], radius=7, color="#DC2626", fill=True, fill_color="#EF4444",
+                    fill_opacity=0.95, tooltip=f"Destination: {cname}"
+                ).add_to(m)
+            else:
+                folium.CircleMarker(
+                    [clat, clon], radius=4.5, color="#374151", fill=True, fill_color="#4B5563",
+                    fill_opacity=0.85, tooltip=f"Other City: {cname}"
+                ).add_to(m)
+
+        rdata = st.session_state.route_data
+        if rdata and rdata["origin"] == origin and rdata["destination"] == destination:
+            for r in reversed(rdata["routes"]):
+                if r["is_main"]:
+                    folium.PolyLine(
+                        r["points"],
+                        color="#FF7A2F" if not rdata["straight"] else "#2563EB",
+                        weight=5,
+                        opacity=0.9,
+                        tooltip=r["name"]
+                    ).add_to(m)
+                else:
+                    folium.PolyLine(
+                        r["points"],
+                        color="#6B7280",
+                        weight=3.5,
+                        opacity=0.7,
+                        dash_array="6",
+                        tooltip=f"{r['name']} ({r['dist_km']:.1f} km)"
+                    ).add_to(m)
+
+        st_folium(m, width=760, height=450, returned_objects=[])
+        st.markdown("""
+            <div class="legend-row">
+                <b>Map Legend:</b> &nbsp;
+                🟢 Start City &nbsp;|&nbsp;
+                🔴 Destination &nbsp;|&nbsp;
+                🔵 Route Stops &nbsp;|&nbsp;
+                ⚫ Other Cities
+            </div>
+        """, unsafe_allow_html=True)
+
+# --- FOOTER ---
+st.markdown("""
+<div class="footer">
+    🌐 GRAPH MATRIX PRO - FINAL PROJECT © 2026 | COMPREHENSIVE GRAPH ANALYSIS & JAVA ROUTE PLANNING | DEVELOPED WITH STREAMLIT & NETWORKX
+</div>
+""", unsafe_allow_html=True)
