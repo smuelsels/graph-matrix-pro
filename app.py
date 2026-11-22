@@ -48,7 +48,7 @@ def get_member_image(member: dict):
     photo_path = member.get("photo")
     if photo_path and os.path.isfile(photo_path):
         return photo_path
-    return make_avatar_data_uri(member["name"], member["accent"])
+    return make_avatar_data_uri(member["name"], member.get("accent", "#64748B"))
 
 
 # --- CUSTOM CSS (Tema Hitam / Dark Slate & Terracotta Amber) ---
@@ -164,27 +164,15 @@ st.markdown("""
         margin-bottom: 10px;
     }
     .role-badge {
-        background-color: rgba(232, 106, 44, 0.16);
-        color: #FF9A66;
-        border: 1px solid rgba(232, 106, 44, 0.45);
+        background-color: rgba(148, 163, 184, 0.14);
+        color: #E2E8F0;
+        border: 1px solid rgba(148, 163, 184, 0.32);
         padding: 7px 14px;
         border-radius: 18px;
         font-size: 12px;
         font-weight: 700;
         display: inline-block;
-        margin: 6px 0 14px 0;
-    }
-    .contrib-box {
-        text-align: left;
-        font-size: 13.5px;
-        color: #DCE3EA;
-    }
-    .contrib-box ul {
-        padding-left: 18px;
-        margin-top: 6px;
-    }
-    .contrib-box li {
-        margin-bottom: 6px;
+        margin: 6px 0 6px 0;
     }
     .overview-card {
         background-color: #171E27;
@@ -338,43 +326,22 @@ if page == "Team Profiles":
             "name": "SAMUEL JUAN TRISNA MANURUNG",
             "nim": "021202600017",
             "role": "⚙️ DevOps & Project Manager / Team Leader",
-            "accent": "#E86A2C",
-            "photo": "assetssamuel.jpg",
-            "contributions": [
-                "Led the team by coordinating tasks and managing timelines.",
-                "Oversaw the entire development workflow.",
-                "Handled deployment using GitHub and Streamlit Community Cloud.",
-                "Managed version control and repository structure.",
-                "Ensured final deployment met project requirements."
-            ]
+            "accent": "#64748B",
+            "photo": "assets/samuel.jpg"
         },
         {
             "name": "MEYSYA RAHMADIYAH",
             "nim": "021202600016",
             "role": "🪄 Quality Assurance (QA) & Finalizer",
-            "accent": "#D97706",
-            "photo": "assetsmeysya.jpg",
-            "contributions": [
-                "Conducted thorough testing of all features to detect bugs, UI inconsistencies, and functionality issues.",
-                "Reported issues to the developers and verified fixes to ensure the system operated smoothly.",
-                "Reviewed the entire web application for quality, completeness, and user experience before final submission.",
-                "Finalized all project components, including documentation, formatting, and the submission file.",
-                "Ensured that the deployed website and project report met academic standards and were error-free."
-            ]
+            "accent": "#64748B",
+            "photo": "assets/meysya.jpg"
         },
         {
             "name": "ABDI",
             "nim": "021202600026",
             "role": "💻 Back-End Developer & Full-Stack Developer",
-            "accent": "#3B82F6",
-            "photo": "assetsabdi.jpg",
-            "contributions": [
-                "Developed the server-side logic and built the core functionalities required for the web application.",
-                "Designed and managed the data flow between the front-end and back-end components.",
-                "Implemented APIs and ensured proper communication between the user interface and the database.",
-                "Provided full-stack support by assisting with front-end integration and troubleshooting issues during development.",
-                "Ensured the overall performance, stability, and functionality of the system."
-            ]
+            "accent": "#64748B",
+            "photo": "assets/abdi.jpg"
         }
     ]
 
@@ -385,16 +352,11 @@ if page == "Team Profiles":
             with img_c:
                 st.image(get_member_image(member), width=185)
 
-            bullets = "".join(f"<li>{item}</li>" for item in member["contributions"])
             st.markdown(f"""
                 <div class="profile-card">
                     <div class="profile-name">{member["name"]}</div>
                     <div class="profile-nim">NIM: {member["nim"]}</div>
                     <div class="role-badge">{member["role"]}</div>
-                    <div class="contrib-box">
-                        <b>Contributions:</b>
-                        <ul>{bullets}</ul>
-                    </div>
                 </div>
             """, unsafe_allow_html=True)
 
