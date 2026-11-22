@@ -356,7 +356,6 @@ elif page == "Graph Matrix App":
 
             if st.button("🎲 GENERATE RANDOM GRAPH"):
                 G = nx.gnm_random_graph(num_nodes, num_edges)
-                # Beri bobot acak untuk variasi matriks jika diinginkan
                 for u, v in G.edges():
                     G[u][v]["weight"] = int(np.random.randint(1, 20))
                 st.session_state.graph = G
@@ -602,7 +601,6 @@ elif page == "Java Route Finder":
         lat1, lon1 = CITIES[origin]
         lat2, lon2 = CITIES[destination]
 
-        # Marker semua kota di Pulau Jawa (seperti di screenshot)
         for cname, (clat, clon) in CITIES.items():
             if cname == origin:
                 folium.CircleMarker(
