@@ -247,3 +247,414 @@ if page == "Team Profiles":
             "name": "MEYSYA RAHMADIYAH",
             "nim": "021202600016",
             "role": "🪄 Quality Assurance (QA) & Finalizer",
+            "photo": "https://via.placeholder.com/220x260.png?text=Meysya",
+            "contributions": [
+                "Conducted thorough testing of all features to detect bugs, UI inconsistencies, and functionality issues.",
+                "Reported issues to the developers and verified fixes to ensure the system operated smoothly.",
+                "Reviewed the entire web application for quality, completeness, and user experience before final submission.",
+                "Finalized all project components, including documentation, formatting, and the submission file.",
+                "Ensured that the deployed website and project report met academic standards and were error-free."
+            ]
+        },
+        {
+            "name": "ABDI",
+            "nim": "021202600026",
+            "role": "💻 Back-End Developer & Full-Stack Developer",
+            "photo": "https://via.placeholder.com/220x260.png?text=Abdi",
+            "contributions": [
+                "Developed the server-side logic and built the core functionalities required for the web application.",
+                "Designed and managed the data flow between the front-end and back-end components.",
+                "Implemented APIs and ensured proper communication between the user interface and the database.",
+                "Provided full-stack support by assisting with front-end integration and troubleshooting issues during development.",
+                "Ensured the overall performance, stability, and functionality of the system."
+            ]
+        }
+    ]
+
+    cols = st.columns(3)
+    for col, member in zip(cols, team):
+        with col:
+            _, img_c, _ = st.columns([1, 2, 1])
+            with img_c:
+                st.image(member["photo"], width=185)
+
+            bullets = "".join(f"<li>{item}</li>" for item in member["contributions"])
+            st.markdown(f"""
+                <div class="profile-card">
+                    <div class="profile-name">{member["name"]}</div>
+                    <div class="profile-nim">NIM: {member["nim"]}</div>
+                    <div class="role-badge">{member["role"]}</div>
+                    <div class="contrib-box">
+                        <b>Contributions:</b>
+                        <ul>{bullets}</ul>
+                    </div>
+                </div>
+            """, unsafe_allow_html=True)
+
+    st.markdown("<hr style='border-color:#D5CBB8; margin:32px 0 20px 0;'>", unsafe_allow_html=True)
+    st.markdown("<h2>📋 PROJECT OVERVIEW</h2>", unsafe_allow_html=True)
+    st.markdown('<div class="orange-divider"></div>', unsafe_allow_html=True)
+
+    ov1, ov2 = st.columns(2)
+    with ov1:
+        st.markdown("""
+            <div class="overview-card">
+                <h3>🎯 Project Objectives</h3>
+                <ul>
+                    <li>Develop a comprehensive graph theory visualization and analysis tool</li>
+                    <li>Create an interactive matrix application with adjacency matrix features</li>
+                    <li>Build a Java city routing system with Dijkstra's algorithm</li>
+                    <li>Deploy a fully functional web application using Streamlit</li>
+                    <li>Document the entire development process and results</li>
+                </ul>
+            </div>
+        """, unsafe_allow_html=True)
+    with ov2:
+        st.markdown("""
+            <div class="overview-card">
+                <h3>🛠️ Technologies Used</h3>
+                <ul>
+                    <li><b>Frontend:</b> Streamlit, Folium, Matplotlib</li>
+                    <li><b>Backend:</b> Python, NetworkX, NumPy, Pandas</li>
+                    <li><b>Algorithms:</b> Dijkstra's Algorithm, Graph Theory</li>
+                    <li><b>Deployment:</b> GitHub, Streamlit Community Cloud</li>
+                    <li><b>Design:</b> Custom CSS, Google Fonts</li>
+                </ul>
+            </div>
+        """, unsafe_allow_html=True)
+
+# =====================================================================
+# HALAMAN 2: GRAPH MATRIX APPLICATION
+# =====================================================================
+elif page == "Graph Matrix App":
+    st.markdown("<h1>📊 GRAPH MATRIX APPLICATION</h1>", unsafe_allow_html=True)
+    st.markdown('<div class="orange-divider"></div>', unsafe_allow_html=True)
+    st.write("This application demonstrates graph theory concepts including graph visualization, node degree calculation, and adjacency matrix representation.")
+
+    tab1, tab2, tab3 = st.tabs(["🎲 GRAPH VISUALIZATION", "📈 NODE DEGREES", "🔢 ADJACENCY MATRIX"])
+
+    # --- TAB 1 ---
+    with tab1:
+        p1, p2 = st.columns(2)
+        with p1:
+            st.markdown('<div class="top-pill-card"></div>', unsafe_allow_html=True)
+        with p2:
+            st.markdown('<div class="top-pill-card"></div>', unsafe_allow_html=True)
+
+        col_left, col_right = st.columns([1, 1.35])
+        with col_left:
+            st.subheader("⚙️ GRAPH CONFIGURATION")
+            st.markdown("**Create a Random Graph**")
+            num_nodes = st.slider("Number of Nodes", min_value=2, max_value=20, value=6)
+            max_edges = num_nodes * (num_nodes - 1) // 2
+            num_edges = st.slider(
+                "Number of Edges",
+                min_value=1,
+                max_value=max(1, max_edges),
+                value=min(8, max(1, max_edges))
+            )
+
+            if st.button("🎲 GENERATE RANDOM GRAPH"):
+                G = nx.gnm_random_graph(num_nodes, num_edges)
+                # Beri bobot acak untuk variasi matriks jika diinginkan
+                for u, v in G.edges():
+                    G[u][v]["weight"] = int(np.random.randint(1, 20))
+                st.session_state.graph = G
+
+        with col_right:
+            st.subheader("👁️ GRAPH VISUALIZATION")
+            G = st.session_state.graph
+            if G is None:
+                st.info("👆 Please generate a random graph using the controls on the left to see the visualization here.")
+            else:
+                fig, ax = plt.subplots(figsize=(6.5, 4.2))
+                fig.patch.set_facecolor("#FAF4E6")
+                ax.set_facecolor("#FAF4E6")
+                pos = nx.spring_layout(G, seed=42)
+                labels = {n: str(n + 1) for n in G.nodes()}
+                nx.draw(
+                    G, pos,
+                    labels=labels,
+                    with_labels=True,
+                    node_color="#FF7A2F",
+                    node_size=750,
+                    font_color="white",
+                    font_weight="bold",
+                    edge_color="#444444",
+                    width=1.8,
+                    ax=ax
+                )
+                plt.tight_layout()
+                st.pyplot(fig, use_container_width=True)
+                plt.close(fig)
+
+    # --- TAB 2 ---
+    with tab2:
+        p1, p2 = st.columns(2)
+        with p1:
+            st.markdown('<div class="top-pill-card"></div>', unsafe_allow_html=True)
+        with p2:
+            st.markdown('<div class="top-pill-card"></div>', unsafe_allow_html=True)
+
+        G = st.session_state.graph
+        if G is None:
+            st.warning("Silakan buat graf terlebih dahulu di tab **GRAPH VISUALIZATION**.")
+        else:
+            c_left, c_right = st.columns([1.2, 1])
+
+            degrees = [G.degree(n) for n in G.nodes()]
+            node_labels = [str(n + 1) for n in G.nodes()]
+            max_deg = max(degrees) if degrees else 0
+            min_deg = min(degrees) if degrees else 0
+
+            with c_left:
+                st.subheader("📊 NODE DEGREES CALCULATION")
+                fig, ax = plt.subplots(figsize=(6.5, 4.4))
+                fig.patch.set_facecolor("#FAF4E6")
+                ax.set_facecolor("#FAF4E6")
+
+                colors = []
+                for d in degrees:
+                    if d == max_deg and max_deg > min_deg:
+                        colors.append("#FF6A1A")
+                    elif d == min_deg and max_deg > min_deg:
+                        colors.append("#1E1E1E")
+                    else:
+                        colors.append("#F3E5C8")
+
+                bars = ax.bar(node_labels, degrees, color=colors, edgecolor="#1E1E1E", linewidth=1.2)
+                for bar, d in zip(bars, degrees):
+                    ax.text(
+                        bar.get_x() + bar.get_width() / 2,
+                        bar.get_height() + 0.06,
+                        str(d),
+                        ha="center", va="bottom", fontweight="bold", fontsize=9.5, color="#1E1E1E"
+                    )
+
+                ax.set_title("Node Degrees Distribution", fontweight="bold", fontsize=12)
+                ax.set_xlabel("Nodes", fontweight="bold")
+                ax.set_ylabel("Degree", fontweight="bold")
+                ax.grid(axis="y", linestyle="--", alpha=0.35)
+                plt.tight_layout()
+                st.pyplot(fig, use_container_width=True)
+                plt.close(fig)
+
+            with c_right:
+                st.subheader("📈 DEGREE STATISTICS")
+                st.markdown("**Degree of Each Node:**")
+                for lbl, d in zip(node_labels, degrees):
+                    st.markdown(f"Node {lbl}: {d} connection(s)")
+
+                st.markdown("<hr style='border-color:#D5CBB8;'>", unsafe_allow_html=True)
+                avg_deg = float(np.mean(degrees)) if degrees else 0.0
+                tot_deg = int(np.sum(degrees)) if degrees else 0
+
+                s1, s2, s3, s4 = st.columns(4)
+                s1.metric("Maximum Degree", max_deg)
+                s2.metric("Minimum Degree", min_deg)
+                s3.metric("Average Degree", f"{avg_deg:.2f}")
+                s4.metric("Total Degree", tot_deg)
+
+                st.markdown("<hr style='border-color:#D5CBB8;'>", unsafe_allow_html=True)
+                st.subheader("📋 GRAPH PROPERTIES")
+                is_conn = "Yes" if nx.is_connected(G) else "No"
+                num_comp = nx.number_connected_components(G)
+                gp1, gp2 = st.columns(2)
+                gp1.markdown(f"**Is Connected:** {is_conn}")
+                gp2.markdown(f"**Number of Components:** {num_comp}")
+
+    # --- TAB 3 ---
+    with tab3:
+        p1, p2 = st.columns(2)
+        with p1:
+            st.markdown('<div class="top-pill-card"></div>', unsafe_allow_html=True)
+        with p2:
+            st.markdown('<div class="top-pill-card"></div>', unsafe_allow_html=True)
+
+        G = st.session_state.graph
+        if G is None:
+            st.warning("Silakan buat graf terlebih dahulu di tab **GRAPH VISUALIZATION**.")
+        else:
+            c_left, c_right = st.columns([1.15, 1])
+            labels = [str(n + 1) for n in G.nodes()]
+            adj = nx.to_numpy_array(G, weight="weight", dtype=int)
+            df_adj = pd.DataFrame(adj, index=labels, columns=labels)
+
+            with c_left:
+                st.subheader("🔢 ADJACENCY MATRIX")
+                st.dataframe(df_adj, use_container_width=True)
+
+            with c_right:
+                st.subheader("📊 MATRIX PROPERTIES")
+                shape_val = adj.shape
+                total_elem = int(adj.size)
+                non_zero = int(np.count_nonzero(adj))
+                density = non_zero / total_elem if total_elem > 0 else 0.0
+                is_sym = bool(np.array_equal(adj, adj.T))
+                trace_val = float(np.trace(adj))
+
+                mp1, mp2 = st.columns(2)
+                mp1.markdown(f"**Shape:** {shape_val}")
+                mp1.markdown(f"**Total Elements:** {total_elem}")
+                mp1.markdown(f"**Non-zero Elements:** {non_zero}")
+                mp2.markdown(f"**Matrix Density:** {density:.3f}")
+                mp2.markdown(f"**Symmetric:** {is_sym}")
+                mp2.markdown(f"**Trace:** {trace_val:.1f}")
+
+                st.markdown("<hr style='border-color:#D5CBB8;'>", unsafe_allow_html=True)
+                st.subheader("🎨 MATRIX HEATMAP")
+                fig_h, ax_h = plt.subplots(figsize=(6, 3.6))
+                fig_h.patch.set_facecolor("#FAF4E6")
+                im = ax_h.imshow(adj, cmap="Oranges")
+                ax_h.set_xticks(range(len(labels)))
+                ax_h.set_yticks(range(len(labels)))
+                ax_h.set_xticklabels(labels)
+                ax_h.set_yticklabels(labels)
+                ax_h.set_title("Adjacency Matrix Heatmap", fontweight="bold")
+                fig_h.colorbar(im, ax=ax_h)
+                plt.tight_layout()
+                st.pyplot(fig_h, use_container_width=True)
+                plt.close(fig_h)
+
+# =====================================================================
+# HALAMAN 3: JAVA ISLAND ROUTE PLANNER
+# =====================================================================
+elif page == "Java Route Finder":
+    st.markdown("<h1>🗺️ JAVA ISLAND ROUTE PLANNER</h1>", unsafe_allow_html=True)
+    st.markdown('<div class="orange-divider"></div>', unsafe_allow_html=True)
+
+    p1, p2 = st.columns(2)
+    with p1:
+        st.markdown('<div class="top-pill-card"></div>', unsafe_allow_html=True)
+    with p2:
+        st.markdown('<div class="top-pill-card"></div>', unsafe_allow_html=True)
+
+    col_ctrl, col_map = st.columns([1, 1.45])
+    city_names = list(CITIES.keys())
+
+    with col_ctrl:
+        st.subheader("📍 SELECT YOUR ROUTE")
+        origin = st.selectbox("🚗 Origin City", city_names, index=0)
+        default_dest_idx = city_names.index("Surakarta (Solo)") if "Surakarta (Solo)" in city_names else 1
+        destination = st.selectbox("🎯 Destination City", city_names, index=default_dest_idx)
+
+        st.subheader("🛠️ Routing Options")
+        use_osrm = st.checkbox("Use OSRM for accurate routing (recommended)", value=True)
+        show_alt = st.checkbox("Show alternative routes", value=True)
+
+        if st.button("🔍 FIND ROUTES"):
+            if origin == destination:
+                st.warning("Kota asal dan tujuan tidak boleh sama.")
+            else:
+                lat1, lon1 = CITIES[origin]
+                lat2, lon2 = CITIES[destination]
+                if use_osrm:
+                    alt_str = "true" if show_alt else "false"
+                    url = (
+                        f"http://router.project-osrm.org/route/v1/driving/"
+                        f"{lon1},{lat1};{lon2},{lat2}?overview=full&geometries=geojson&alternatives={alt_str}"
+                    )
+                    try:
+                        res = requests.get(url, timeout=10).json()
+                        routes_out = []
+                        for idx, r in enumerate(res.get("routes", [])):
+                            pts = [(c[1], c[0]) for c in r["geometry"]["coordinates"]]
+                            routes_out.append({
+                                "name": "Main Route" if idx == 0 else f"Alternative {idx}",
+                                "points": pts,
+                                "dist_km": r["distance"] / 1000,
+                                "dur_hr": r["duration"] / 3600,
+                                "is_main": idx == 0
+                            })
+                        st.session_state.route_data = {
+                            "origin": origin,
+                            "destination": destination,
+                            "straight": False,
+                            "routes": routes_out
+                        }
+                    except requests.RequestException:
+                        st.error("Gagal terhubung ke server OSRM.")
+                else:
+                    st.session_state.route_data = {
+                        "origin": origin,
+                        "destination": destination,
+                        "straight": True,
+                        "routes": [{
+                            "name": "Direct Line",
+                            "points": [(lat1, lon1), (lat2, lon2)],
+                            "dist_km": None,
+                            "dur_hr": None,
+                            "is_main": True
+                        }]
+                    }
+
+        if st.session_state.route_data and not st.session_state.route_data["straight"]:
+            for r in st.session_state.route_data["routes"]:
+                if r["is_main"]:
+                    st.success(f"**{r['name']}:** {r['dist_km']:.1f} km | ~{r['dur_hr']:.1f} jam")
+                else:
+                    st.info(f"**{r['name']}:** {r['dist_km']:.1f} km | ~{r['dur_hr']:.1f} jam")
+
+    with col_map:
+        st.subheader("🗺️ INTERACTIVE JAVA MAP")
+        m = folium.Map(location=[-7.35, 110.2], zoom_start=7, tiles="CartoDB positron")
+
+        lat1, lon1 = CITIES[origin]
+        lat2, lon2 = CITIES[destination]
+
+        # Marker semua kota di Pulau Jawa (seperti di screenshot)
+        for cname, (clat, clon) in CITIES.items():
+            if cname == origin:
+                folium.CircleMarker(
+                    [clat, clon], radius=7, color="#16A34A", fill=True, fill_color="#22C55E",
+                    fill_opacity=0.95, tooltip=f"Start City: {cname}"
+                ).add_to(m)
+            elif cname == destination:
+                folium.CircleMarker(
+                    [clat, clon], radius=7, color="#DC2626", fill=True, fill_color="#EF4444",
+                    fill_opacity=0.95, tooltip=f"Destination: {cname}"
+                ).add_to(m)
+            else:
+                folium.CircleMarker(
+                    [clat, clon], radius=4.5, color="#374151", fill=True, fill_color="#4B5563",
+                    fill_opacity=0.85, tooltip=f"Other City: {cname}"
+                ).add_to(m)
+
+        rdata = st.session_state.route_data
+        if rdata and rdata["origin"] == origin and rdata["destination"] == destination:
+            for r in reversed(rdata["routes"]):
+                if r["is_main"]:
+                    folium.PolyLine(
+                        r["points"],
+                        color="#FF7A2F" if not rdata["straight"] else "#2563EB",
+                        weight=5,
+                        opacity=0.9,
+                        tooltip=r["name"]
+                    ).add_to(m)
+                else:
+                    folium.PolyLine(
+                        r["points"],
+                        color="#6B7280",
+                        weight=3.5,
+                        opacity=0.7,
+                        dash_array="6",
+                        tooltip=f"{r['name']} ({r['dist_km']:.1f} km)"
+                    ).add_to(m)
+
+        st_folium(m, width=760, height=450, returned_objects=[])
+        st.markdown("""
+            <div class="legend-row">
+                <b>Map Legend:</b> &nbsp;
+                🟢 Start City &nbsp;|&nbsp;
+                🔴 Destination &nbsp;|&nbsp;
+                🔵 Route Stops &nbsp;|&nbsp;
+                ⚫ Other Cities
+            </div>
+        """, unsafe_allow_html=True)
+
+# --- FOOTER ---
+st.markdown("""
+<div class="footer">
+    🌐 GRAPH MATRIX PRO - FINAL PROJECT © 2026 | COMPREHENSIVE GRAPH ANALYSIS & JAVA ROUTE PLANNING | DEVELOPED WITH STREAMLIT & NETWORKX
+</div>
+""", unsafe_allow_html=True
