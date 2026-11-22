@@ -1,3 +1,5 @@
+import base64
+import urllib.parse
 import folium
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -15,99 +17,149 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- CUSTOM CSS ---
+
+def make_avatar_data_uri(name: str, accent: str = "#E86A2C") -> str:
+    """Membuat avatar SVG bersih bertema hangat jika foto lokal belum tersedia."""
+    parts = [p[0].upper() for p in name.strip().split() if p]
+    initials = "".join(parts[:2]) or "GM"
+    svg = f"""
+    <svg xmlns="http://www.w3.org/2000/svg" width="220" height="250" viewBox="0 0 220 250">
+        <defs>
+            <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#1E2B37"/>
+                <stop offset="100%" stop-color="#2F4152"/>
+            </linearGradient>
+        </defs>
+        <rect width="220" height="250" rx="18" fill="url(#bg)"/>
+        <circle cx="110" cy="96" r="44" fill="{accent}" opacity="0.92"/>
+        <text x="110" y="110" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="34" font-weight="bold">{initials}</text>
+        <rect x="34" y="162" width="152" height="6" rx="3" fill="{accent}" opacity="0.7"/>
+        <text x="110" y="192" text-anchor="middle" fill="#F8F5EE" font-family="Arial, sans-serif" font-size="14" font-weight="bold">{urllib.parse.quote(name.split()[0])}</text>
+        <text x="110" y="213" text-anchor="middle" fill="#B8C4D0" font-family="Arial, sans-serif" font-size="11">Graph Matrix Pro</text>
+    </svg>
+    """.strip()
+    encoded = base64.b64encode(svg.encode("utf-8")).decode("utf-8")
+    return f"data:image/svg+xml;base64,{encoded}"
+
+
+# --- CUSTOM CSS (Palet Warm Ivory, Slate Navy & Terracotta Amber) ---
 st.markdown("""
 <style>
     .stApp {
-        background-color: #FAF4E6;
-        color: #1E1E1E;
+        background-color: #F8F5EE;
+        color: #16202A;
     }
     section[data-testid="stSidebar"] {
-        background-color: #1E1E1E;
-        color: #F5F5F5;
+        background: linear-gradient(180deg, #16202A 0%, #1E2C3A 100%);
+        color: #F8F5EE;
+        border-right: 1px solid rgba(255, 255, 255, 0.08);
     }
     section[data-testid="stSidebar"] * {
-        color: #F5F5F5;
+        color: #F8F5EE;
     }
     .sidebar-brand {
-        font-size: 20px;
+        font-size: 19px;
         font-weight: 800;
         line-height: 1.25;
         margin-bottom: 4px;
+        color: #FFFFFF !important;
     }
     .sidebar-sub {
         font-size: 12px;
-        color: #BBBBBB !important;
-        margin-bottom: 16px;
+        color: #B6C2CE !important;
+        margin-bottom: 14px;
     }
     .orange-banner {
-        background: linear-gradient(90deg, #FF7A2F 0%, #FF934F 100%);
-        height: 46px;
-        border-radius: 10px;
-        margin-bottom: 20px;
+        background: linear-gradient(120deg, #16202A 0%, #273849 52%, #E86A2C 100%);
+        padding: 14px 22px;
+        border-radius: 14px;
+        margin-bottom: 22px;
+        color: #FFFFFF;
+        box-shadow: 0 6px 18px rgba(22, 32, 42, 0.12);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .banner-pill {
+        background: rgba(255, 255, 255, 0.14);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        color: #FFFFFF;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 5px 12px;
+        border-radius: 999px;
     }
     .orange-divider {
         height: 3px;
-        background-color: #FF7A2F;
+        background: linear-gradient(90deg, #E86A2C 0%, #F39C6B 100%);
         border: none;
+        border-radius: 999px;
         margin-top: -8px;
         margin-bottom: 18px;
     }
     .top-pill-card {
         background-color: #FFFFFF;
-        height: 42px;
+        height: 36px;
         border-radius: 12px;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+        border-left: 4px solid #E86A2C;
+        box-shadow: 0 3px 10px rgba(22, 32, 42, 0.05);
         margin-bottom: 16px;
     }
     div.stButton > button {
-        background-color: #FF7A2F;
-        color: white !important;
+        background-color: #E86A2C;
+        color: #FFFFFF !important;
         font-weight: 700;
-        border-radius: 8px;
+        border-radius: 10px;
         border: none;
         width: 100%;
         padding: 10px 14px;
         text-align: center;
+        box-shadow: 0 4px 10px rgba(232, 106, 44, 0.24);
+        transition: all 0.2s ease;
     }
     div.stButton > button:hover {
-        background-color: #E5651C;
-        color: white !important;
+        background-color: #CF571D;
+        color: #FFFFFF !important;
+        transform: translateY(-1px);
     }
     .profile-card {
         background-color: #FFFFFF;
         padding: 22px 20px;
         border-radius: 16px;
-        box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+        border: 1px solid #EAE2D3;
+        box-shadow: 0 6px 18px rgba(22, 32, 42, 0.06);
         text-align: center;
         margin-top: 10px;
     }
     .profile-name {
-        font-size: 20px;
+        font-size: 18px;
         font-weight: 800;
-        margin: 8px 0 4px 0;
-        color: #1E1E1E;
+        margin: 6px 0 4px 0;
+        color: #16202A;
     }
     .profile-nim {
         font-size: 13px;
         font-weight: 700;
-        color: #444444;
+        color: #52606D;
         margin-bottom: 10px;
     }
     .role-badge {
-        background-color: #FF7A2F;
-        color: white;
-        padding: 8px 14px;
+        background-color: #FFF1EA;
+        color: #C84F16;
+        border: 1px solid #F6C3A8;
+        padding: 7px 14px;
         border-radius: 18px;
-        font-size: 12.5px;
+        font-size: 12px;
         font-weight: 700;
         display: inline-block;
-        margin: 8px 0 14px 0;
+        margin: 6px 0 14px 0;
     }
     .contrib-box {
         text-align: left;
         font-size: 13.5px;
-        color: #2B2B2B;
+        color: #24303C;
     }
     .contrib-box ul {
         padding-left: 18px;
@@ -119,33 +171,39 @@ st.markdown("""
     .overview-card {
         background-color: #FFFFFF;
         padding: 22px 24px;
-        border-radius: 14px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+        border-radius: 16px;
+        border: 1px solid #EAE2D3;
+        border-top: 4px solid #16202A;
+        box-shadow: 0 6px 16px rgba(22, 32, 42, 0.06);
         height: 100%;
     }
     .overview-card ul {
         padding-left: 18px;
         margin-top: 10px;
         font-size: 14px;
-        color: #2B2B2B;
+        color: #24303C;
     }
     .overview-card li {
         margin-bottom: 6px;
     }
     .legend-row {
+        background-color: #FFFFFF;
+        border: 1px solid #EAE2D3;
+        border-radius: 10px;
+        padding: 8px 14px;
         font-size: 12.5px;
         font-weight: 600;
         margin-top: 8px;
-        color: #333333;
+        color: #16202A;
     }
     .footer {
         text-align: center;
         font-size: 12px;
         font-weight: 700;
-        color: #333333;
+        color: #52606D;
         margin-top: 45px;
         padding-top: 16px;
-        border-top: 1px solid #D5CBB8;
+        border-top: 1px solid #DFD5C5;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -199,7 +257,7 @@ with st.sidebar:
     st.markdown("""
         <div class="sidebar-brand">🌐 DISCRETE MATHEMATICS FINAL PROJECT</div>
         <div class="sidebar-sub">Advanced Graph Analysis Platform</div>
-        <hr style="border-color:#383838;">
+        <hr style="border-color:rgba(255,255,255,0.12);">
     """, unsafe_allow_html=True)
 
     if st.button("👥 TEAM PROFILES", key="nav_team"):
@@ -210,12 +268,12 @@ with st.sidebar:
         st.session_state.page = "Java Route Finder"
 
     st.markdown("""
-        <hr style="border-color:#383838; margin-top:20px;">
-        <div style="font-size:12px; font-weight:700; margin-bottom:8px;">👥 DEVELOPMENT TEAM</div>
-        <div style="font-size:12px; color:#D4D4D4; line-height:1.5;">
-            - Samuel J. T. M. (021202600017)<br>
-            - Meysya Rahmadiyah (021202600016)<br>
-            - Abdi (021202600026)
+        <hr style="border-color:rgba(255,255,255,0.12); margin-top:20px;">
+        <div style="font-size:12px; font-weight:700; margin-bottom:8px; color:#F39C6B;">👥 DEVELOPMENT TEAM</div>
+        <div style="font-size:12px; color:#D6E0EA; line-height:1.6;">
+            • Samuel J. T. M. (021202600017)<br>
+            • Meysya Rahmadiyah (021202600016)<br>
+            • Abdi (021202600026)
         </div>
     """, unsafe_allow_html=True)
 
@@ -225,16 +283,21 @@ page = st.session_state.page
 # HALAMAN 1: TEAM PROFILES + PROJECT OVERVIEW
 # =====================================================================
 if page == "Team Profiles":
-    st.markdown('<div class="orange-banner"></div>', unsafe_allow_html=True)
-    st.markdown("<h1 style='text-align:center; letter-spacing:1px;'>TEAM MEMBER PROFILES</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='font-size:18px; font-weight:600; margin-bottom:16px;'>Meet the talented team behind Graph Matrix Pro</p>", unsafe_allow_html=True)
+    st.markdown("""
+        <div class="orange-banner">
+            <span style="font-weight:700; font-size:14px;">🌐 Graph Matrix Pro • Discrete Mathematics Final Project</span>
+            <span class="banner-pill">Graph Theory • Adjacency Matrix • Java Routing</span>
+        </div>
+    """, unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align:center; letter-spacing:1px; color:#16202A;'>TEAM MEMBER PROFILES</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align:center; font-size:17px; font-weight:600; color:#52606D; margin-bottom:20px;'>Meet the talented team behind Graph Matrix Pro</p>", unsafe_allow_html=True)
 
     team = [
         {
             "name": "SAMUEL JUAN TRISNA MANURUNG",
             "nim": "021202600017",
             "role": "⚙️ DevOps & Project Manager / Team Leader",
-            "photo": "https://via.placeholder.com/220x260.png?text=Samuel",
+            "accent": "#E86A2C",
             "contributions": [
                 "Led the team by coordinating tasks and managing timelines.",
                 "Oversaw the entire development workflow.",
@@ -247,7 +310,7 @@ if page == "Team Profiles":
             "name": "MEYSYA RAHMADIYAH",
             "nim": "021202600016",
             "role": "🪄 Quality Assurance (QA) & Finalizer",
-            "photo": "https://via.placeholder.com/220x260.png?text=Meysya",
+            "accent": "#D97706",
             "contributions": [
                 "Conducted thorough testing of all features to detect bugs, UI inconsistencies, and functionality issues.",
                 "Reported issues to the developers and verified fixes to ensure the system operated smoothly.",
@@ -260,7 +323,7 @@ if page == "Team Profiles":
             "name": "ABDI",
             "nim": "021202600026",
             "role": "💻 Back-End Developer & Full-Stack Developer",
-            "photo": "https://via.placeholder.com/220x260.png?text=Abdi",
+            "accent": "#2B6CB0",
             "contributions": [
                 "Developed the server-side logic and built the core functionalities required for the web application.",
                 "Designed and managed the data flow between the front-end and back-end components.",
@@ -276,7 +339,8 @@ if page == "Team Profiles":
         with col:
             _, img_c, _ = st.columns([1, 2, 1])
             with img_c:
-                st.image(member["photo"], width=185)
+                # Ganti make_avatar_data_uri(...) dengan path foto lokal (misal "assets/samuel.jpg") jika sudah ada
+                st.image(make_avatar_data_uri(member["name"], member["accent"]), width=185)
 
             bullets = "".join(f"<li>{item}</li>" for item in member["contributions"])
             st.markdown(f"""
@@ -291,7 +355,7 @@ if page == "Team Profiles":
                 </div>
             """, unsafe_allow_html=True)
 
-    st.markdown("<hr style='border-color:#D5CBB8; margin:32px 0 20px 0;'>", unsafe_allow_html=True)
+    st.markdown("<hr style='border-color:#DFD5C5; margin:34px 0 22px 0;'>", unsafe_allow_html=True)
     st.markdown("<h2>📋 PROJECT OVERVIEW</h2>", unsafe_allow_html=True)
     st.markdown('<div class="orange-divider"></div>', unsafe_allow_html=True)
 
