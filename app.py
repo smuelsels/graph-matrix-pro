@@ -101,10 +101,18 @@ st.markdown("""
     }
     .top-pill-card {
         background-color: #FFFFFF;
-        height: 36px;
-        border-radius: 12px;
-        border-left: 4px solid #E86A2C;
+        height: 14px;
+        border-radius: 999px;
+        border-left: 10px solid #E86A2C;
         box-shadow: 0 3px 10px rgba(22, 32, 42, 0.05);
+        margin-bottom: 16px;
+    }
+    .panel-card {
+        background-color: #FFFFFF;
+        padding: 20px 22px;
+        border-radius: 16px;
+        border: 1px solid #EAE2D3;
+        box-shadow: 0 6px 18px rgba(22, 32, 42, 0.06);
         margin-bottom: 16px;
     }
     div.stButton > button {
@@ -204,6 +212,26 @@ st.markdown("""
         margin-top: 45px;
         padding-top: 16px;
         border-top: 1px solid #DFD5C5;
+    }
+    div[data-testid="stAlert"] {
+        border-radius: 12px !important;
+        border: 1px solid #EAE2D3 !important;
+        box-shadow: 0 4px 12px rgba(22, 32, 42, 0.05) !important;
+    }
+    /* Memaksa ketiga tulisan tab menjadi hitam */
+    button[data-baseweb="tab"],
+    button[data-baseweb="tab"] p,
+    button[data-baseweb="tab"] div,
+    button[data-baseweb="tab"] span {
+        color: #16202A !important;
+        font-weight: 700 !important;
+    }
+    button[data-baseweb="tab"][aria-selected="true"],
+    button[data-baseweb="tab"][aria-selected="true"] p,
+    button[data-baseweb="tab"][aria-selected="true"] div,
+    button[data-baseweb="tab"][aria-selected="true"] span {
+        color: #16202A !important;
+        border-bottom-color: #E86A2C !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -339,7 +367,6 @@ if page == "Team Profiles":
         with col:
             _, img_c, _ = st.columns([1, 2, 1])
             with img_c:
-                # Ganti make_avatar_data_uri(...) dengan path foto lokal (misal "assets/samuel.jpg") jika sudah ada
                 st.image(make_avatar_data_uri(member["name"], member["accent"]), width=185)
 
             bullets = "".join(f"<li>{item}</li>" for item in member["contributions"])
@@ -390,7 +417,7 @@ if page == "Team Profiles":
 # =====================================================================
 # HALAMAN 2: GRAPH MATRIX APPLICATION
 # =====================================================================
-if page == "Graph Matrix App":
+elif page == "Graph Matrix App":
     st.markdown("""
         <div class="orange-banner">
             <span style="font-weight:700; font-size:14px;">📊 Graph Matrix Pro • Graph Theory & Adjacency Analysis</span>
@@ -409,7 +436,6 @@ if page == "Graph Matrix App":
 
     tab1, tab2, tab3 = st.tabs(["🎲 GRAPH VISUALIZATION", "📈 NODE DEGREES", "🔢 ADJACENCY MATRIX"])
 
-    # --- TAB 1 ---
     with tab1:
         p1, p2 = st.columns(2)
         with p1:
@@ -440,7 +466,7 @@ if page == "Graph Matrix App":
 
         with col_right:
             st.markdown('<div class="panel-card">', unsafe_allow_html=True)
-            st.subheader("👁️ GRAPH VISUALIZATION")
+            st.markdown("<h3 style='color:#16202A; margin-top:0;'>👁️ GRAPH VISUALIZATION</h3>", unsafe_allow_html=True)
             G = st.session_state.graph
             if G is None:
                 st.info("👆 Please generate a random graph using the controls on the left to see the visualization here.")
@@ -469,7 +495,6 @@ if page == "Graph Matrix App":
                 plt.close(fig)
             st.markdown("</div>", unsafe_allow_html=True)
 
-    # --- TAB 2 ---
     with tab2:
         p1, p2 = st.columns(2)
         with p1:
@@ -549,7 +574,6 @@ if page == "Graph Matrix App":
                 gp2.markdown(f"**Number of Components:** {num_comp}")
                 st.markdown("</div>", unsafe_allow_html=True)
 
-    # --- TAB 3 ---
     with tab3:
         p1, p2 = st.columns(2)
         with p1:
