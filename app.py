@@ -48,7 +48,7 @@ def get_member_image(member: dict):
     photo_path = member.get("photo")
     if photo_path and os.path.isfile(photo_path):
         return photo_path
-    return make_avatar_data_uri(member["name"], member.get("accent", "#64748B"))
+    return make_avatar_data_uri(member["name"], member.get("accent", "#E86A2C"))
 
 
 # --- CUSTOM CSS (Tema Hitam / Dark Slate & Terracotta Amber) ---
@@ -164,9 +164,9 @@ st.markdown("""
         margin-bottom: 10px;
     }
     .role-badge {
-        background-color: rgba(148, 163, 184, 0.14);
-        color: #E2E8F0;
-        border: 1px solid rgba(148, 163, 184, 0.32);
+        background-color: rgba(232, 106, 44, 0.16);
+        color: #FF9A66;
+        border: 1px solid rgba(232, 106, 44, 0.45);
         padding: 7px 14px;
         border-radius: 18px;
         font-size: 12px;
@@ -326,21 +326,21 @@ if page == "Team Profiles":
             "name": "SAMUEL JUAN TRISNA MANURUNG",
             "nim": "021202600017",
             "role": "⚙️ DevOps & Project Manager / Team Leader",
-            "accent": "#64748B",
+            "accent": "#E86A2C",
             "photo": "assets/samuel.jpg"
         },
         {
             "name": "MEYSYA RAHMADIYAH",
             "nim": "021202600016",
             "role": "🪄 Quality Assurance (QA) & Finalizer",
-            "accent": "#64748B",
+            "accent": "#D97706",
             "photo": "assets/meysya.jpg"
         },
         {
             "name": "ABDI",
             "nim": "021202600026",
             "role": "💻 Back-End Developer & Full-Stack Developer",
-            "accent": "#64748B",
+            "accent": "#3B82F6",
             "photo": "assets/abdi.jpg"
         }
     ]
