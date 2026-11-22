@@ -206,23 +206,6 @@ st.markdown("""
         border-top: 1px solid #DFD5C5;
     }
 </style>
-/* Memaksa ketiga tulisan tab menjadi hitam */
-    button[data-baseweb="tab"],
-    button[data-baseweb="tab"] p,
-    button[data-baseweb="tab"] div,
-    button[data-baseweb="tab"] span {
-        color: #16202A !important;
-        font-weight: 700 !important;
-    }
-
-    /* Tab yang sedang aktif tetap hitam dengan garis bawah oranye */
-    button[data-baseweb="tab"][aria-selected="true"],
-    button[data-baseweb="tab"][aria-selected="true"] p,
-    button[data-baseweb="tab"][aria-selected="true"] div,
-    button[data-baseweb="tab"][aria-selected="true"] span {
-        color: #16202A !important;
-        border-bottom-color: #E86A2C !important;
-    }
 """, unsafe_allow_html=True)
 
 # --- DATA KOTA PULAU JAWA ---
